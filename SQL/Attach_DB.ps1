@@ -1,12 +1,7 @@
 #clear-host
 #Remove-Variable * -ErrorAction SilentlyContinue
 
-#$mountpath = "E:\Mount"
-
 param ($mountpath)
-# $mountpath = $mountdrive +"\mount"
-# $mountpath = $mountdrive
-
 
 
 #Create Variables
@@ -36,6 +31,8 @@ $smo.ConnectionContext.Login = $config.SQL.Credentials.Login
 $smo.ConnectionContext.Password = $config.SQL.Credentials.Password
 $smo.ConnectionContext.Connect()
 
+$dbs = (Get-SqlDatabase -ServerInstance $config.sql.Server).name
+
 Get-ChildItem -Path $mountpath -Recurse -include *.mdf | ForEach-Object {
  if ($_.Extension -eq ".mdf") {
           $mdfFile = Get-Item -Path $_.FullName
@@ -50,13 +47,16 @@ Get-ChildItem -Path $mountpath -Recurse -include *.mdf | ForEach-Object {
     $files = New-Object System.Collections.Specialized.StringCollection
     $files.add($mdf) | Out-Null
     $files.add($ldf) | Out-Null
-    write-host "Attaching database $dbname"
+    
     $dbname | out-file $databaselistfile -Append
     
 try {
-         
+       #Write-Host $dbs
+       if ($dbs -notcontains $DBName)
+        {
+         write-host "Attaching database $dbname"
         $smo.AttachDatabase($DBName, $files);
-     
+        }
     }
 
 catch
@@ -72,5 +72,8 @@ catch
     
     
     
+}
+
+
 }
 
