@@ -2,24 +2,23 @@
 #Remove-Variable * -ErrorAction SilentlyContinue
 
 param ($mountpath)
-
-
-#Create Variables
-$ScriptLocation = "e:\scripts"
-$databaselistfile = "$ScriptLocation\databaselist.txt"
-
-
-$config = ""
-$smo = ""
-
-#remove-item C:\Scripts\databases.txt
-remove-item $databaselistfile -ErrorAction SilentlyContinue
-remove-item "e:\Scripts\error-log.txt" -ErrorAction SilentlyContinue
-
 Set-Location e:\Scripts
 
 #Import SQL Powershell
 import-module sqlps
+
+#Create Variables
+$ScriptLocation = "e:\scripts"
+$databaselistfile = "$ScriptLocation\databaselist.txt"
+$errorlog = "$scriptlocation\error-log.txt"
+
+$config = ""
+$smo = ""
+
+#Cleanup files
+remove-item $databaselistfile -ErrorAction SilentlyContinue
+remove-item $errorlog -ErrorAction SilentlyContinue
+
 
 # Load configuration XML file.
 [xml]$config = Get-Content "DatabasesConfig.xml"
@@ -72,8 +71,5 @@ catch
     
     
     
-}
-
-
 }
 
