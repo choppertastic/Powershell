@@ -11,11 +11,7 @@ import-module sqlps
 $ScriptLocation = "e:\scripts"
 
 $errorlog = "$scriptlocation\error-log.txt"
-$mount = $mountpath.remove(0,3)
-$mount = $mount.replace('\','-')
-# $databaselistfile = "$ScriptLocation\databaselist-$mount.txt"
 
-write-host $mount
 $config = ""
 $smo = ""
 
